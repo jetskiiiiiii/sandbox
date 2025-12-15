@@ -1,7 +1,9 @@
 - git practices
-1. if deleting branch on local, delete also on remote
-2. before pushing local branch, update local main (and thus the local branch)
-3. instead of git pull, use git fetch + git log <local-branch>..<remote-branch> + git merge
+1. remote branches will be removed once merged
+2. if you are making changes and find that you have been working on wrong branch, google it (different based on commited/uncommitted)
+3. before pushing local branch, update local main (and thus the local branch)
+4. instead of git pull, use git fetch + git log <local-branch>..<remote-branch> + git merge
+5. name branches with "high-level/low-level" syntax
 
 
 
