@@ -1,3 +1,11 @@
+- git practices
+1. if deleting branch on local, delete also on remote
+2. before pushing local branch, update local main (and thus the local branch)
+3. instead of git pull, use git fetch + git log <local-branch>..<remote-branch> + git merge
+
+
+
+
 <a href="https://demo-nextjs-with-supabase.vercel.app/">
   <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
   <h1 align="center">Next.js and Supabase Starter Kit</h1>
