@@ -1,12 +1,15 @@
 import AccountForm from './account-form'
 import { createClient } from '@/utils/supabase/server'
+import { Suspense } from 'react'
+import { AccountAuth } from './components/AccountAuth'
 
 export default async function Account() {
-  const supabase = await createClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  return <AccountForm user={user} />
+  return (
+    <main>
+    <h1>Account</h1>
+    <Suspense fallback={<p>Loading..</p>}>
+      <AccountAuth />
+    </Suspense>
+    </main>
+  )
 }
