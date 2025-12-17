@@ -1,10 +1,9 @@
 "use client"
 
-import { ImagePreviewType, UploadedImageType } from "@/utils/interface"
-import { ChangeEvent, useEffect, useState } from "react"
+import { ImagePreviewType } from "@/utils/interface"
+import { useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { createClient } from "@/utils/supabase/client"
-import { error } from "console"
 
 export default function CreateImagesComponent({ userId}: {userId: string}) {
   //const [ filesSelection, setFilesSelection ] = useState<UploadedImageType[]>([])
