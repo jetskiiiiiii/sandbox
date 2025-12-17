@@ -1,10 +1,7 @@
 // Naming all types with [NAME]Type
-export interface UploadedImageType {
+export interface ImagePreviewType {
   url: string;
   name: string;
   size: number;
-}
-
-export interface ImagePreviewType extends UploadedImageType {
   file: File;
 }

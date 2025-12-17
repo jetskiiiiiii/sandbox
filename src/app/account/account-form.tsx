@@ -1,7 +1,8 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/utils/supabase/client'
 import { type User } from '@supabase/supabase-js'
+import { ProfileType } from '@/utils/interface'
 
 // ...
 
@@ -49,18 +50,14 @@ export default function AccountForm({ user }: { user: User | null }) {
     username,
     website,
     avatar_url,
-  }: {
-    username: string | null
-    fullname: string | null
-    website: string | null
-    avatar_url: string | null
-  }) {
+    full_name, // Match the interface name exactly
+  }: ProfileType) {
     try {
       setLoading(true)
 
       const { error } = await supabase.from('profiles').upsert({
         id: user?.id as string,
-        full_name: fullname,
+        full_name: full_name, // Mapping interface to DB
         username,
         website,
         avatar_url,
@@ -115,7 +112,7 @@ export default function AccountForm({ user }: { user: User | null }) {
       <div>
         <button
           className="button primary block"
-          onClick={() => updateProfile({ fullname, username, website, avatar_url })}
+          onClick={() => updateProfile({ full_name: fullname, username, website, avatar_url })}
           disabled={loading}
         >
           {loading ? 'Loading ...' : 'Update'}
