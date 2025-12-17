@@ -1,6 +1,7 @@
-import { Suspense } from 'react'
 import AccountForm from './account-form'
 import { createClient } from '@/utils/supabase/server'
+import { Suspense } from 'react'
+import { AccountAuth } from './components/AccountAuth'
 
 /**
  * 1. This component handles the "Dynamic" work.
