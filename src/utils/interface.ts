@@ -1,10 +1,7 @@
 // Naming all types with [NAME]Type
-interface FileType {
-
-}
-
-interface UploadFileType {
+export interface ImagePreviewType {
   url: string;
   name: string;
   size: number;
+  file: File;
 }
