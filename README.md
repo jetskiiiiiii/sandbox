@@ -17,7 +17,7 @@ References:
 
 TODO (Rio):
 - create-post
-    - currently public
+    - (DONE) currently public
     - function to save draft
     - create text/video
     - add ui
