@@ -6,7 +6,6 @@ import { useDropzone } from "react-dropzone"
 import { createClient } from "@/utils/supabase/client"
 
 export default function CreateImagesComponent({ userId}: {userId: string}) {
-  //const [ filesSelection, setFilesSelection ] = useState<UploadedImageType[]>([])
   const [ uploadedFiles, setUploadedFiles ] = useState<ImagePreviewType[]>([])
   const [ fileError, setFileError ] = useState<string | null>(null)
   const [ uploadingStatus, setUploadingStatus ] = useState<boolean>(false)
@@ -66,17 +65,30 @@ export default function CreateImagesComponent({ userId}: {userId: string}) {
         const fileExtension = item.name.split(".").pop()
         const fileName = `${userId}/${Math.random()}.${fileExtension}`
 
-        const {data: uploadImageData, error: uploadImageError } = await supabase.storage
+        // Upload image(s) to bucket
+        const { data: uploadImageData, error: uploadImageError } = await supabase.storage
           .from("images")
           .upload(fileName, item.file)
 
         if (uploadImageError) {
-          console.log(uploadImageError)
           throw uploadImageError
         }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from("images")
+          .getPublicUrl(fileName)
+
+        // Assign image url(s) to user in database
+        const { error: assignImageError } = await supabase
+          .from("images")
+          .insert({public_url: publicUrl})
+
+        if (assignImageError) throw assignImageError
+
       })
 
       await Promise.all(uploadPromises)
+
       alert("Upload successful.")
       setUploadedFiles([])
     } catch (err: any) {

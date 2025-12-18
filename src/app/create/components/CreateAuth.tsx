@@ -6,8 +6,8 @@ export async function CreateAuth() {
   const supabase = await createClient()
   const { data: userData, error: userError } = await supabase.auth.getUser()
   if (userError || !userData?.user) {
-  //  //redirect("/")
+    redirect("/")
   }
 
-  return <CreateImagesComponent />
+  return <CreateImagesComponent userId={userData?.user.id}/>
 }
