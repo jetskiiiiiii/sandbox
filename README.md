@@ -5,6 +5,10 @@
 4. instead of git pull, use git fetch + git log <local-branch>..<remote-branch> + git merge
 5. name branches with "high-level/low-level" syntax
 
+- to-do (darrel):
+1. after signup take them straight to homepage
+2. in account settings, add button to verify email
+
 
 - general practices
 1. when authenticating pages, create separate auth component and wrap component in Suspense in page.tsx
