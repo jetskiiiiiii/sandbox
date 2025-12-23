@@ -5,10 +5,6 @@
 4. instead of git pull, use git fetch + git log <local-branch>..<remote-branch> + git merge
 5. name branches with "high-level/low-level" syntax
 
-- to-do (darrel):
-1. after signup take them straight to homepage
-2. in account settings, add button to verify email
-
 
 ## references
 uncached data accessed outside of suspense: https://nextjs.org/docs/messages/blocking-route
@@ -31,6 +27,25 @@ uncached data accessed outside of suspense: https://nextjs.org/docs/messages/blo
   <a href="#more-supabase-examples"><strong>More Examples</strong></a>
 </p>
 <br/>
+
+to-do (darrel):
+1. after signup take user straight to homepage
+2. in account settings, add button to verify email
+
+ui flows (darrel):
+- login page
+  - signup (button)
+    - homepage
+  - login (button)
+    - homepage
+
+- homepage
+  - account settings
+    - verify email (button)
+      - "auth email has been sent" page
+
+- auth email
+  - homepage (email has been auth notif)
 
 ## Features
 
