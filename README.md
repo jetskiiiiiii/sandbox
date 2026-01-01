@@ -12,15 +12,19 @@
 2. for now, authenticate using getUser
 
 # TODO (Rio):
-- create-post
-    - post images
-        - add caption to images
-    - (DONE) currently public
-    - function to save draft
-    - post text/video
-    - add ui
-    - (DONE) redirect to profile homepage after upload
-    - constraing status column in supabase to "draft" or "published"
+  - Darrel
+    1. after signup take them straight to homepage
+    2. in account settings, add button to verify email
+  - Rio
+    - create-post
+        - post images
+            - add caption to images
+        - (DONE) currently public
+        - function to save draft
+        - post text/video
+        - add ui
+        - (DONE) redirect to profile homepage after upload
+        - constraing status column in supabase to "draft" or "published"
 
 # UI FLOWS 
     - Creations Dashboard
