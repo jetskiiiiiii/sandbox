@@ -1,14 +1,16 @@
 "use client"
 
 import { ImagePreviewType } from "@/utils/interface"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { createClient } from "@/utils/supabase/client"
+import { redirect } from "next/navigation"
 
-export default function CreateImagesComponent({ userId}: {userId: string}) {
+export default function CreateImagesComponent({ userId }: {userId: string}) {
   const [ uploadedFiles, setUploadedFiles ] = useState<ImagePreviewType[]>([])
   const [ fileError, setFileError ] = useState<string | null>(null)
   const [ uploadingStatus, setUploadingStatus ] = useState<boolean>(false)
+  const [ savingStatus, setSavingStatus ] = useState<boolean>(false)
 
   useEffect(() => {
     return () => {
@@ -43,6 +45,7 @@ export default function CreateImagesComponent({ userId}: {userId: string}) {
       name: file.name,
       size: file.size,
       file: file,
+      status: "draft",
     }))
 
     setUploadedFiles((prev) => [...prev, ...validFiles])
@@ -95,6 +98,48 @@ export default function CreateImagesComponent({ userId}: {userId: string}) {
       setFileError(err.message)
     } finally {
       setUploadingStatus(false)
+      redirect("/")
+    }
+  }
+
+  const handleSaveDraft = async () => {
+    setSavingStatus(true)
+    const supabase = await createClient()
+
+    try {
+      const uploadPromises = uploadedFiles.map(async (item) => {
+        const fileExtension = item.name.split(".").pop()
+        const fileName = `${userId}/${Math.random()}.${fileExtension}`
+
+        // Upload image(s) to bucket
+        const { data: uploadImageData, error: uploadImageError } = await supabase.storage
+          .from("images")
+          .upload(fileName, item.file)
+
+        if (uploadImageError) {
+          throw uploadImageError
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from("images")
+          .getPublicUrl(fileName)
+
+        // Assign image url(s) to user in database
+        const { error: assignImageError } = await supabase
+          .from("images")
+          .insert({public_url: publicUrl})
+
+        if (assignImageError) throw assignImageError
+    })
+
+      await Promise.all(uploadPromises)
+
+      alert("Draft saved.")
+      setUploadedFiles([])
+    } catch (err: any) {
+        setFileError(err.message)
+    } finally {
+        setSavingStatus(false)
     }
   }
 
@@ -105,34 +150,45 @@ export default function CreateImagesComponent({ userId}: {userId: string}) {
   })
 
   return (
-    <div>
-      <div {...getRootProps()}>
-        <input {...getInputProps()} />
-        <p>Drag images here or click to select (max 5).</p>
-      </div>
-
-      {fileError && <p>{fileError}</p>}
-
       <div>
-        {uploadedFiles.map((file, index) => (
-          <div key={file.url}>
-            <img src={file.url} alt={file.name} width={50} />
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <p>Drag images here or click to select (max 5).</p>
+        </div>
+
+        {fileError && <p>{fileError}</p>}
+
+        <div>
+          {uploadedFiles.map((file, index) => (
+            <div key={file.url}>
+              <img src={file.url} alt={file.name} width={50} />
+              <button
+                onClick={() => removeFromSelection(index)}
+              >Remove</button>
+            </div>
+          ))}
+        </div>
+
+        {uploadedFiles.length > 0 && (
+          <div>
             <button
-              onClick={() => removeFromSelection(index)}
-            >Remove</button>
+              onClick={handleImageUpload}
+              disabled={uploadingStatus}
+            >
+              {uploadingStatus ? "Uploading.." : "Upload images"}
+            </button>
+            <button
+              onClick={handleSaveDraft}
+              disabled={savingStatus}
+            >
+              {savingStatus ? "Saving.." : "Saved"}
+            </button>
           </div>
-        ))}
+        )}
+
       </div>
-
-      {uploadedFiles.length > 0 && (
-        <button
-          onClick={handleImageUpload}
-          disabled={uploadingStatus}
-        >
-          {uploadingStatus ? "Uploading.." : "Upload images"}
-        </button>
-      )}
-
-    </div>
   )
 }
+
+
+
