@@ -5,7 +5,7 @@ import CreatePageLoad from "./components/load-page"
 export default async function CreatePage({
   params
 }: {
-  params: Promise<{ post_id: string }>
+  params: Promise<{ creation_id: string }>
 }) {
   return (
     <div>

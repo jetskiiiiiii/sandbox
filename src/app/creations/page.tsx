@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 
-import CreateLoad from "./components/load-page"
+import CreationsDashboardLoad from "./components/load-page"
 
 export default function Create() {
   return (
@@ -8,7 +8,7 @@ export default function Create() {
       <h1>Creations</h1>
       
       <Suspense fallback={<p>Loading...</p>}>
-        <CreateLoad />
+        <CreationsDashboardLoad />
       </Suspense>
     </main>
   )

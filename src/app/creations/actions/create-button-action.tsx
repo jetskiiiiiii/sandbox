@@ -3,17 +3,28 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
+/*
+ * Action for when user makes new creation.
+ * 1. Should create creation_metadata, creation_state row
+*/
 export async function CreationButtonAction() {
   const supabase = await createClient()
-  const { data: creationId, error: insertError } = await supabase
-    .from("posts_metadata")
+  
+  // Initialize metadata 
+  const { data: creationId, error: insertMetadataError } = await supabase
+    .from("creation_metadata")
     .insert({})
-    .select('post_id')
+    .select("id")
     .single()
-
-  if (insertError || !creationId?.post_id) {
-    throw insertError
+  if (insertMetadataError || !creationId?.id) {
+    throw insertMetadataError
   }
+
+  // Initialize state
+  const { error: insertStateError } = await supabase
+    .from("creation_state")
+    .insert({creaion_id: creationId.id})
+  if (insertStateError) throw insertStateError
     
-  redirect(`/creations/${creationId.post_id}`)
+  redirect(`/creations/${creationId.id}`)
 }

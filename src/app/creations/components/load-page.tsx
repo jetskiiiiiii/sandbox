@@ -8,22 +8,22 @@ import CreationsDashboard from "./creations-dashboard";
  * Authenticates and loads the post metadata.
  *
  */
-export default async function CreateLoad() {
+export default async function CreationsDashboardLoad() {
   const supabase = await createClient()
-  const { data: userData, error: userError } = await supabase.auth.getUser()
-  if (userError || !userData?.user) {
+  const { data: authData, error: authError } = await supabase.auth.getUser()
+  if (authError || !authData?.user) {
     redirect("/")
   }
 
   const { data: postMetadata, error: postMetadataError } = await supabase
     .from("posts_metadata")
     .select()
-    .eq("user_id", userData.user.id)
+    .eq("user_id", authData.user.id)
 
   return (
     <div>
       <Suspense fallback={"Loading creations.."}>
-        <CreationsDashboard userId={userData.user.id} postMetadata={postMetadata}/>
+        <CreationsDashboard userId={authData.user.id} postMetadata={postMetadata}/>
       </Suspense>
     </div>
   )
